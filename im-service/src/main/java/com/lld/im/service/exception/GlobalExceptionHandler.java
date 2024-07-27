@@ -17,15 +17,24 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Set;
 
+/**
+ * 全局异常处理类
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler(value=Exception.class)
+    /**
+     * 当未知类型的错误背这个方法所捕获
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public ResponseVO unknowException(Exception e){
+    public ResponseVO unknowException(Exception e) {
         e.printStackTrace();
-        ResponseVO resultBean =new ResponseVO();
+        ResponseVO resultBean = new ResponseVO();
         resultBean.setCode(BaseErrorCode.SYSTEM_ERROR.getCode());
         resultBean.setMsg(BaseErrorCode.SYSTEM_ERROR.getError());
         /**
@@ -46,7 +55,7 @@ public class GlobalExceptionHandler {
     public Object handleMethodArgumentNotValidException(ConstraintViolationException ex) {
 
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-        ResponseVO resultBean =new ResponseVO();
+        ResponseVO resultBean = new ResponseVO();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
         for (ConstraintViolation<?> constraintViolation : constraintViolations) {
             PathImpl pathImpl = (PathImpl) constraintViolation.getPropertyPath();
@@ -61,11 +70,17 @@ public class GlobalExceptionHandler {
         return resultBean;
     }
 
+    /**
+     * 这是我们自定义的异常
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(ApplicationException.class)
     @ResponseBody
     public Object applicationExceptionHandler(ApplicationException e) {
         // 使用公共的结果类封装返回结果, 这里我指定状态码为
-        ResponseVO resultBean =new ResponseVO();
+        ResponseVO resultBean = new ResponseVO();
         resultBean.setCode(e.getCode());
         resultBean.setMsg(e.getError());
         return resultBean;
@@ -79,10 +94,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
-    public Object  handleException2(BindException ex) {
+    public Object handleException2(BindException ex) {
         FieldError err = ex.getFieldError();
         String message = "参数{".concat(err.getField()).concat("}").concat(err.getDefaultMessage());
-        ResponseVO resultBean =new ResponseVO();
+        ResponseVO resultBean = new ResponseVO();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
         resultBean.setMsg(message);
         return resultBean;
@@ -93,7 +108,7 @@ public class GlobalExceptionHandler {
     //json格式
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public Object  handleException1(MethodArgumentNotValidException ex) {
+    public Object handleException1(MethodArgumentNotValidException ex) {
         StringBuilder errorMsg = new StringBuilder();
         BindingResult re = ex.getBindingResult();
         for (ObjectError error : re.getAllErrors()) {
@@ -101,7 +116,7 @@ public class GlobalExceptionHandler {
         }
         errorMsg.delete(errorMsg.length() - 1, errorMsg.length());
 
-        ResponseVO resultBean =new ResponseVO();
+        ResponseVO resultBean = new ResponseVO();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
         resultBean.setMsg(BaseErrorCode.PARAMETER_ERROR.getError() + " : " + errorMsg.toString());
         return resultBean;
