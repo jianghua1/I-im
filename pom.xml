@@ -22,6 +22,7 @@
         <module>im-tcp</module>
         <module>im-codec</module>
         <module>im-message-store</module>
+        <module>chat-server-875</module>
     </modules>
 
     <properties>
