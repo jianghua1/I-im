@@ -1,5 +1,7 @@
-package com.imooc.netty.websocket;
+package com.imooc.netty;
 
+import com.imooc.netty.http.HttpServerInitializer;
+import com.imooc.netty.websocket.WSServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -27,7 +29,8 @@ public class NettyServer {
             //客户端和服务端通信，服务端和客户端通信所以是双向通道
             bootstrap.channel(NioServerSocketChannel.class);
             //worker丢过来的信息需要处理，所以需要设置childHandler，至于如何处理需要我们编写
-            bootstrap.childHandler(new HttpServerInitializer());
+//            bootstrap.childHandler(new HttpServerInitializer());
+            bootstrap.childHandler(new WSServerInitializer());
             /**
              * 绑定关系配置结束
              */
