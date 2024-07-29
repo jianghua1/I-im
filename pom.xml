@@ -1,217 +1,223 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.lld</groupId>
-    <artifactId>im-system</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>lld-im</name>
-    <description>l-im project</description>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.6.11</version>
+        <relativePath />
     </parent>
+    <groupId>com.imooc</groupId>
+    <artifactId>imooc-hire-dev</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <modules>
-        <module>im-service</module>
-        <module>im-common</module>
-        <module>im-tcp</module>
-        <module>im-codec</module>
-        <module>im-message-store</module>
         <module>chat-server-875</module>
+        <module>hire-common</module>
     </modules>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <mybatis-plus.version>3.4.2</mybatis-plus.version>
-        <hutool.version>5.0.6</hutool.version>
-        <redisson.version>3.15.6</redisson.version>
-        <snakeyaml.version>1.27</snakeyaml.version>
-        <protostuff-api>1.0.10</protostuff-api>
-        <zkClient.version>0.1</zkClient.version>
-        <apache.httpclient.version>4.5.9</apache.httpclient.version>
-        <rabbit.client.version>5.6.0</rabbit.client.version>
-        <apache.commons.version>3.12.0</apache.commons.version>
-        <fastjson.version>1.2.51</fastjson.version>
-        <springboot.version>2.3.2.RELEASE</springboot.version>
-        <netty.version>4.1.35.Final</netty.version>
-        <feign.version>8.18.0</feign.version>
     </properties>
-
-    <dependencies>
-        <!-- 日志框架 -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-access</artifactId>
-        </dependency>
-
-        <!-- fastjson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
-    </dependencies>
-
-
     <dependencyManagement>
         <dependencies>
-            <!-- protostuff依赖包 begin -->
+            <!-- 引入微服务 spring-cloud-->
             <dependency>
-                <groupId>com.dyuproject.protostuff</groupId>
-                <artifactId>protostuff-api</artifactId>
-                <version>${protostuff-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.dyuproject.protostuff</groupId>
-                <artifactId>protostuff-core</artifactId>
-                <version>${protostuff-api}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.dyuproject.protostuff</groupId>
-                <artifactId>protostuff-runtime</artifactId>
-                <version>${protostuff-api}</version>
-            </dependency>
-            <!-- protostuff依赖包 end -->
-
-            <!-- commons -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${apache.commons.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2021.0.4</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
-            <!-- fastjson -->
+            <!-- 引入微服务组件 spring-cloud-alibaba -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2021.0.1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
-            <!-- redis -->
+            <!-- mysql 驱动 -->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>${springboot.version}</version>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.26</version>
             </dependency>
-
-            <!-- rabbitmq -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-amqp</artifactId>
-                <version>${springboot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.rabbitmq</groupId>
-                <artifactId>amqp-client</artifactId>
-                <version>${rabbit.client.version}</version>
-            </dependency>
-
             <!-- mybatis plus -->
+            <!--<dependency>-->
+            <!--<groupId>org.mybatis.spring.boot</groupId>-->
+            <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
+            <!--<version>2.1.0</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <version>3.5.0</version>
+            </dependency>
+            <!-- 通用mapper逆向工具 -->
+            <!--<dependency>-->
+            <!--<groupId>tk.mybatis</groupId>-->
+            <!--<artifactId>mapper-spring-boot-starter</artifactId>-->
+            <!--<version>2.1.5</version>-->
+            <!--</dependency>-->
+            <!-- pagehelper -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>1.4.1</version>
             </dependency>
 
-            <!--            <dependency>-->
-            <!--                <groupId>com.baomidou</groupId>-->
-            <!--                <artifactId>mybatis-plus-generator</artifactId>-->
-            <!--                <version>${mybatis-plus.version}</version>-->
-            <!--            </dependency>-->
-
-            <!-- 参数校验 -->
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>${hibernate-validator.version}</version>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongodb-driver</artifactId>
+                <version>3.12.11</version>
             </dependency>
 
-            <!-- redisson -->
+            <!-- zookeeper -->
             <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>${redisson.version}</version>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>3.8.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>5.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>5.3.0</version>
             </dependency>
 
-            <!-- yaml -->
+
+            <!--<dependency>-->
+            <!--<groupId>com.squareup.okhttp3</groupId>-->
+            <!--<artifactId>okhttp</artifactId>-->
+            <!--<version>4.2.2</version>-->
+            <!--</dependency>-->
+
+            <!-- jackson -->
             <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>2.10.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>2.10.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.10.2</version>
             </dependency>
 
-            <!-- hutool -->
+            <!-- 百度api -->
             <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
+                <groupId>com.baidu.aip</groupId>
+                <artifactId>java-sdk</artifactId>
+                <version>4.16.8</version>
+            </dependency>
+
+            <!-- apache 工具类 -->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.15</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.12.0</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.11.0</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>${apache.httpclient.version}</version>
+                <version>4.5.13</version>
             </dependency>
 
-            <!--  zkClient -->
+            <!-- google 工具类 -->
             <dependency>
-                <groupId>com.github.sgroschupf</groupId>
-                <artifactId>zkclient</artifactId>
-                <version>${zkClient.version}</version>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>28.2-jre</version>
             </dependency>
 
-            <!-- netty -->
+            <!-- joda-time 时间工具 -->
             <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty.version}</version>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.10.6</version>
             </dependency>
 
-            <!-- feign调用依赖 -->
+            <!-- knife4j 接口文档工具 -->
             <dependency>
-                <groupId>com.netflix.feign</groupId>
-                <artifactId>feign-core</artifactId>
-                <version>${feign.version}</version>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>2.0.9</version>
             </dependency>
             <dependency>
-                <groupId>com.netflix.feign</groupId>
-                <artifactId>feign-jackson</artifactId>
-                <version>${feign.version}</version>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-springdoc-ui</artifactId>
+                <version>3.0.3</version>
             </dependency>
 
+            <!-- MinIO -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>8.2.1</version>
+            </dependency>
+
+            <!-- 视频处理 -->
+            <dependency>
+                <groupId>com.googlecode.soundlibs</groupId>
+                <artifactId>mp3spi</artifactId>
+                <version>1.9.5.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv</artifactId>
+                <version>1.5.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>ffmpeg-platform</artifactId>
+                <version>4.1.3-1.5.1</version>
+            </dependency>
         </dependencies>
-
-
     </dependencyManagement>
 
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
+            <!-- Java 编译 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
         </plugins>
