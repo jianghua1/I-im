@@ -75,6 +75,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         String channelId = ctx.channel().id().asLongText();
         System.out.println("客户端断开，channel对应的长id为：" + channelId);
         clients.remove(ctx.channel());
+        //短线重连删除过去的会话
+        String userId = UserChannelSession.getUserChannelIdRelation(channelId);
+        UserChannelSession.removeUselessChannels(channelId, userId);
     }
 
     @Override
@@ -83,5 +86,8 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         //当发生异常时，将当前channel关闭
         ctx.channel().close();
         clients.remove(ctx.channel());
+        String channelId = ctx.channel().id().asLongText();
+        String userId = UserChannelSession.getUserChannelIdRelation(channelId);
+        UserChannelSession.removeUselessChannels(channelId, userId);
     }
 }

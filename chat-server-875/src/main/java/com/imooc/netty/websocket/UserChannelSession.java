@@ -67,6 +67,32 @@ public class UserChannelSession {
         return multiSession.get(userId);
     }
 
+    /**
+     * 移除多余的无用会话
+     *
+     * @param channelId
+     * @param userId
+     */
+    public static void removeUselessChannels(String channelId, String userId) {
+        //通过userId获取所有会话
+        List<Channel> channels = getMultiSession(userId);
+        //将对应会话删除
+        if (channels == null || channels.isEmpty()) {
+            return;
+        }
+        for (Channel channel : channels) {
+            if (channelId.equals(channel.id().asLongText())) {
+                channels.remove(channel);
+                break;
+            }
+        }
+        if (!channels.isEmpty())
+            multiSession.put(userId, channels);
+        else
+            multiSession.remove(userId);
+
+    }
+
     public static void outputMulti() {
         System.out.println("---------------------");
         multiSession.keySet().forEach(key -> {
