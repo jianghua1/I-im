@@ -16,6 +16,10 @@ public class UserChannelSession {
     //用于多端多设备同时接收消息，允许一个设备在多个设备同时在线
     private static Map<String, List<Channel>> multiSession = new ConcurrentHashMap<>();
     //用于客户端longId和用户id的关联关系
+    /**
+     * 用户id是可以伪造的，但是客户端id是不能伪造的，所以映射是客户端和用户的关系
+     * 当客户端找到对应的用户id时，使用用户id进行校验，校验通过后从multiSession中获取channel的对象
+     */
     private static Map<String, String> userChannelIdRelation = new ConcurrentHashMap<>();
 
     /**

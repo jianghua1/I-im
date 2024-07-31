@@ -1,6 +1,5 @@
 package com.imooc.netty.websocket;
 
-import com.imooc.netty.http.HttpHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
