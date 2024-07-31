@@ -1,6 +1,10 @@
 package com.imooc.netty.websocket;
 
 
+import com.imooc.enums.MsgTypeEnum;
+import com.imooc.pojo.ChatMsg;
+import com.imooc.pojo.DataContent;
+import com.imooc.utils.GsonUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,6 +12,9 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+
+import java.time.LocalDateTime;
+
 
 /**
  * 处理消息的handler
@@ -26,17 +33,34 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         //获取当前用户连接的客户端channel
         Channel channel = ctx.channel();
         String currentChannelId = channel.id().asLongText();
-
-//        GsonUtils
+        /*
+         * 1.获取客户端发来的消息并且解析
+         */
+        DataContent dataContent = GsonUtils.stringToBean(content, DataContent.class);
+        ChatMsg chatMsg = dataContent.getChatMsg();
+        String message = chatMsg.getMsg();
+        String senderId = chatMsg.getSenderId();
+        String receiverId = chatMsg.getReceiverId();
+        //时间校准
+        chatMsg.setChatTime(LocalDateTime.now());
+        //获取消息类型用于判断
+        Integer msgType = chatMsg.getMsgType();
+        //消息的类型判断
+        if (msgType == MsgTypeEnum.CONNECT_INIT.type) {
+            //初始化channel会话，将用户和channel关联起来
+            UserChannelSession.putUserChannelIdRelation(currentChannelId, senderId);
+            UserChannelSession.putMultiSession(senderId, channel);
+        }
         //给客户端写入消息，将消息使用TextWebSocketFrame包裹
         TextWebSocketFrame replayMsg = new TextWebSocketFrame("当前客户端的id为：" + currentChannelId);
         //对连接进来的客户回复消息
 //        channel.writeAndFlush(replayMsg);
         //向所有客户端群发消息
-        clients.writeAndFlush(replayMsg);
+//        clients.writeAndFlush(replayMsg);
 //        for (Channel channel1 : clients) {
 //            channel1.writeAndFlush(replayMsg);
 //        }
+        UserChannelSession.outputMulti();
     }
 
     @Override

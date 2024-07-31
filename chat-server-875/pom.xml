@@ -13,17 +13,26 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.25.Final</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.imooc</groupId>
+            <artifactId>hire-pojo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.imooc</groupId>
+            <artifactId>hire-pojo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.imooc</groupId>
             <artifactId>hire-common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
