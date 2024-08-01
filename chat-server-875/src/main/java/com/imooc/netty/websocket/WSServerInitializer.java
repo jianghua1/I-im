@@ -28,10 +28,19 @@ public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("HttpServerCodec", new HttpServerCodec());
         pipeline.addLast(new ChunkedWriteHandler());
         pipeline.addLast(new HttpObjectAggregator(1024 * 64));
-        pipeline.addLast(new IdleStateHandler(8,10,60));
+        pipeline.addLast(new IdleStateHandler(8, 10, 60));
         pipeline.addLast(new HeartBeatHandler());
         //本handler会帮我们处理一些繁重的事物，比如我手动做
         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
         pipeline.addLast(new ChatHandler());
+        /**
+         * 以上是websocket的编程模型，如果是高性能场景，pipeline上一定会添加编解码器，并且
+         * 上方的例子直接就可以接收和发送字符串内容，在高性能通信中做不到，高性能通信传递的数据一定
+         * 是byte数组（甚至还要压缩）。
+         */
+//        ChannelPipeline highPipeline = socketChannel.pipeline();
+//        highPipeline.addLast("decoder",new StringDecoder());
+//        highPipeline.addLast("encoder",new StringEncoder());
+//        highPipeline.addLast("new XXXXHandler()");
     }
 }
