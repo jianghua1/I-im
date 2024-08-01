@@ -37,6 +37,11 @@ public class ChatMsg implements Serializable {
     private Integer receiverType;
 
     /**
+     * 信息接收者是否在线
+     */
+    private Boolean isReceiverOnline;
+
+    /**
      * 聊天内容
      */
     private String msg;
@@ -139,6 +144,14 @@ public class ChatMsg implements Serializable {
 
     public void setReceiverType(Integer receiverType) {
         this.receiverType = receiverType;
+    }
+
+    public Boolean getReceiverOnline() {
+        return isReceiverOnline;
+    }
+
+    public void setReceiverOnline(Boolean receiverOnline) {
+        isReceiverOnline = receiverOnline;
     }
 
     public String getMsg() {

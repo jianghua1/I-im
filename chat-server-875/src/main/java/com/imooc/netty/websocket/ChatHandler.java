@@ -5,6 +5,7 @@ import com.imooc.enums.MsgTypeEnum;
 import com.imooc.pojo.ChatMsg;
 import com.imooc.pojo.DataContent;
 import com.imooc.utils.GsonUtils;
+import com.imooc.utils.LocalDateUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,6 +15,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -50,7 +52,30 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             //初始化channel会话，将用户和channel关联起来
             UserChannelSession.putUserChannelIdRelation(currentChannelId, senderId);
             UserChannelSession.putMultiSession(senderId, channel);
+        } else if (msgType == MsgTypeEnum.WORDS.type) {
+            //通过信息接收人的id找到会话
+            List<Channel> channelList = UserChannelSession.getMultiSession(receiverId);
+            if (channelList == null || channelList.isEmpty()) {
+                //将消息推到容器中
+                chatMsg.setReceiverOnline(false);
+                return;
+            } else {
+                chatMsg.setReceiverOnline(true);
+                String chatTimeFormat = LocalDateUtils.format(chatMsg.getChatTime(), LocalDateUtils.DATETIME_PATTERN_2);
+                //对消息进行再次的封装
+                dataContent.setChatTime(chatTimeFormat);
+                for (Channel c : channelList) {
+                    Channel findChannel = clients.find(c.id());
+                    if (findChannel == null) {
+                        continue;
+                    }
+                    findChannel.writeAndFlush(new TextWebSocketFrame(GsonUtils.object2String(dataContent)));
+                }
+
+            }
+
         }
+
         //给客户端写入消息，将消息使用TextWebSocketFrame包裹
         TextWebSocketFrame replayMsg = new TextWebSocketFrame("当前客户端的id为：" + currentChannelId);
         //对连接进来的客户回复消息
